@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viper Esports - Training Attendance System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="loginSection" class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <div class="logo-emblem">
+                    <div class="emblem-head">
+                        <div class="emblem-eyes">
+                            <div class="eye left-eye"></div>
+                            <div class="eye right-eye"></div>
+                        </div>
+                        <div class="emblem-gem"></div>
+                        <div class="emblem-fangs">
+                            <div class="fang left-fang"></div>
+                            <div class="fang right-fang"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="logo-text">
+                    <h1>VPR</h1>
+                    <p>Training Attendance System</p>
+                </div>
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="Enter your username" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter your password" class="form-input">
+                </div>
+                <button id="loginBtn" class="btn btn-primary">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Section -->
+    <div id="appSection" class="app-container hidden">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <div class="nav-logo">
+                    <div class="nav-emblem">
+                        <div class="emblem-head">
+                            <div class="emblem-eyes">
+                                <div class="eye left-eye"></div>
+                                <div class="eye right-eye"></div>
+                            </div>
+                            <div class="emblem-gem"></div>
+                            <div class="emblem-fangs">
+                                <div class="fang left-fang"></div>
+                                <div class="fang right-fang"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>VPR</h2>
+                </div>
+            </div>
+            <div class="nav-links">
+                <button class="nav-link active" data-section="home">Home</button>
+                <button class="nav-link" data-section="attendance">Attendance</button>
+                <button class="nav-link" data-section="scrims">Create Scrim</button>
+                <button class="nav-link" data-section="tours">Create Tour</button>
+                <button class="nav-link" data-section="history">History</button>
+                <button class="nav-link" data-section="profile">Profile</button>
+            </div>
+            <div class="nav-user">
+                <span id="userRole"></span>
+                <span id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Content Sections -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="homeSection" class="content-section active">
+                <div class="section-header">
+                    <h2>Welcome to VPR</h2>
+                    <p>Manage your team's training attendance and track performance</p>
+                </div>
+                
+                <div class="training-time-info">
+                    <div class="time-card">
+                        <h3>⏰ Daily Training Time</h3>
+                        <p id="trainingTimeDisplay">8:00 PM</p>
+                        <div class="time-controls" id="timeControls" style="display: none;">
+                            <input type="time" id="newTrainingTime" class="time-input" value="20:00">
+                            <button id="saveTimeBtn" class="btn btn-success">Save Time</button>
+                            <button id="cancelTimeBtn" class="btn btn-secondary">Cancel</button>
+                        </div>
+                        <button id="editTimeBtn" class="btn btn-primary">Change Training Time</button>
+                    </div>
+                    
+                    <div class="training-type-card">
+                        <h3>🎯 Training Type</h3>
+                        <div class="training-type-controls">
+                            <label class="radio-label">
+                                <input type="radio" name="trainingType" value="main" id="mainOnly" checked>
+                                <span>Main Roster Only</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="trainingType" value="academy" id="mainAcademy">
+                                <span>Main + Academy</span>
+                            </label>
+                        </div>
+                        <button id="saveTrainingTypeBtn" class="btn btn-primary">Save Training Type</button>
+                    </div>
+                </div>
+                
+                <div class="roster-management-section">
+                    <h3>👥 Roster Management</h3>
+                    <p>Leaders can assign players to Main Roster or Academy</p>
+                    <div id="rosterManagementGrid" class="roster-management-grid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Players</h3>
+                        <p id="totalPlayers">10</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Main Roster</h3>
+                        <p id="mainRosterCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Academy</h3>
+                        <p id="academyCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Players</h3>
+                        <p id="activePlayers">10</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Kicked Players</h3>
+                        <p id="kickedPlayers">0</p>
+                    </div>
+                </div>
+
+                <div class="roster-preview">
+                    <h3>Current Roster</h3>
+                    <div id="rosterGrid" class="roster-grid"></div>
+                </div>
+            </section>
+
+            <!-- Attendance Section -->
+            <section id="attendanceSection" class="content-section">
+                <div class="section-header">
+                    <h2>Training Attendance</h2>
+                    <div class="attendance-controls">
+                        <input type="date" id="sessionDate" class="date-input">
+                        <button id="markAttendanceBtn" class="btn btn-primary">Mark Attendance</button>
+                        <button id="resetSeasonBtn" class="btn btn-warning">Reset Season</button>
+                    </div>
+                </div>
+
+                <div class="attendance-table-container">
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Status</th>
+                                <th>Missed</th>
+                                <th>Chances Left</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Create Scrim Section -->
+            <section id="scrimsSection" class="content-section">
+                <div class="section-header">
+                    <h2>Create Scrim</h2>
+                    <p>Schedule and manage scrim matches for your team</p>
+                </div>
+
+                <div class="scrim-creation-container">
+                    <div class="scrim-form">
+                        <h3>📅 Scrim Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="scrimDate">Date:</label>
+                                <input type="date" id="scrimDate" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="scrimTime">Time:</label>
+                                <input type="time" id="scrimTime" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="scrimOpponent">Opponent Team:</label>
+                            <input type="text" id="scrimOpponent" placeholder="Enter opponent team name" class="form-input">
+                        </div>
+
+                        <h3>👥 Player Selection</h3>
+                        <div class="player-selection">
+                            <div class="main-players">
+                                <h4>Main Players (5 required) <span id="mainPlayerCount" style="color: #3498db;">0/5</span></h4>
+                                <div id="mainPlayersSelection" class="player-checkboxes">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="substitute-player">
+                                <h4>Substitute Player (1 optional) <span id="substituteCount" style="color: #f39c12;">0/1</span></h4>
+                                <div id="substituteSelection" class="player-checkboxes">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="igl-selection">
+                                <h4>In-Game Leader (IGL)</h4>
+                                <select id="iglPlayer" class="form-input">
+                                    <option value="">Select IGL from main players</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="scrim-actions">
+                            <button id="createScrimBtn" class="btn btn-primary">Create Scrim</button>
+                            <button id="clearScrimFormBtn" class="btn btn-secondary">Clear Form</button>
+                            <button id="clearAllScrimsBtn" class="btn btn-danger">Clear All Scrims</button>
+                        </div>
+                    </div>
+
+                    <div class="scrim-list">
+                        <h3>📋 Active Scrims</h3>
+                        <div id="activeScrimsList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Create Tour Section -->
+            <section id="toursSection" class="content-section">
+                <div class="section-header">
+                    <h2>Create Tour</h2>
+                    <p>Schedule and manage tournament participation for main roster</p>
+                </div>
+
+                <div class="tour-creation-container">
+                    <div class="tour-form">
+                        <h3>🏆 Tour Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tourDate">Date:</label>
+                                <input type="date" id="tourDate" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="tourTime">Time:</label>
+                                <input type="time" id="tourTime" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tourName">Tournament Name:</label>
+                            <input type="text" id="tourName" placeholder="Enter tournament name" class="form-input">
+                        </div>
+
+                        <h3>👥 Main Roster Selection</h3>
+                        <div class="player-selection">
+                            <div class="main-roster-players">
+                                <h4>Main Roster Players (5 required) <span id="tourPlayerCount" style="color: #3498db;">0/5</span></h4>
+                                <div id="tourPlayersSelection" class="player-checkboxes">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="tour-igl-selection">
+                                <h4>Tournament IGL (Static)</h4>
+                                <select id="tourIglPlayer" class="form-input">
+                                    <option value="">Select Tournament IGL</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="tour-actions">
+                            <button id="createTourBtn" class="btn btn-primary">Create Tour</button>
+                            <button id="clearTourFormBtn" class="btn btn-secondary">Clear Form</button>
+                            <button id="clearAllToursBtn" class="btn btn-danger">Clear All Tours</button>
+                        </div>
+                    </div>
+
+                    <div class="tour-list">
+                        <h3>🏆 Active Tours</h3>
+                        <div id="activeToursList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- History Section -->
+            <section id="historySection" class="content-section">
+                <div class="section-header">
+                    <h2>Training History</h2>
+                    <div class="history-controls">
+                        <input type="date" id="historyDate" class="date-input">
+                        <button id="exportBtn" class="btn btn-secondary">Export Data</button>
+                    </div>
+                </div>
+
+                <div class="history-container">
+                    <div id="historyContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profileSection" class="content-section">
+                <div class="section-header">
+                    <h2>Profile</h2>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="profile-card">
+                        <h3>Your Information</h3>
+                        <p><strong>Role:</strong> <span id="profileRole"></span></p>
+                        <p><strong>Name:</strong> <span id="profileName"></span></p>
+                        <p><strong>Status:</strong> <span id="profileStatus"></span></p>
+                        <p><strong>Missed Trainings:</strong> <span id="profileMissed"></span></p>
+                        <p><strong>Chances Left:</strong> <span id="profileChances"></span></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
